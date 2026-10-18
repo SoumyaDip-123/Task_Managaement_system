@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <h1>Task Manager</h1>
+
+    <form id="task-form" class="task-form">
+      <input type="text" id="task-input" placeholder="What needs to be done?" required autocomplete="off">
+      <select id="priority-select" aria-label="Priority">
+        <option value="low">Low</option>
+        <option value="medium" selected>Medium</option>
+        <option value="high">High</option>
+      </select>
+      <input type="date" id="due-input" aria-label="Due date">
+      <button type="submit">Add</button>
+    </form>
+
+    <div class="toolbar">
+      <div class="filters">
+        <button class="filter active" data-filter="all">All</button>
+        <button class="filter" data-filter="active">Active</button>
+        <button class="filter" data-filter="completed">Completed</button>
+      </div>
+      <span id="counter" class="counter"></span>
+    </div>
+
+    <ul id="task-list" class="task-list"></ul>
+    <p id="empty-state" class="empty-state">No tasks here. Add one above!</p>
+
+    <button id="clear-completed" class="clear-btn">Clear completed</button>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
