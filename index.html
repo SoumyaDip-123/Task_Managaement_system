@@ -3,38 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Manager</title>
+  <title>TaskFlow – Task Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="app">
-    <h1>Task Manager</h1>
+  <div class="layout">
 
-    <form id="task-form" class="task-form">
-      <input type="text" id="task-input" placeholder="What needs to be done?" required autocomplete="off">
-      <select id="priority-select" aria-label="Priority">
-        <option value="low">Low</option>
-        <option value="medium" selected>Medium</option>
-        <option value="high">High</option>
-      </select>
-      <input type="date" id="due-input" aria-label="Due date">
-      <button type="submit">Add</button>
-    </form>
-
-    <div class="toolbar">
-      <div class="filters">
-        <button class="filter active" data-filter="all">All</button>
-        <button class="filter" data-filter="active">Active</button>
-        <button class="filter" data-filter="completed">Completed</button>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-logo">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span class="brand-name">TaskFlow</span>
       </div>
-      <span id="counter" class="counter"></span>
-    </div>
 
-    <ul id="task-list" class="task-list"></ul>
-    <p id="empty-state" class="empty-state">No tasks here. Add one above!</p>
+      <nav class="nav-group">
+        <p class="nav-title">Tasks</p>
+        <button class="nav-item active" data-status="all">All tasks <span class="count" id="count-all">0</span></button>
+        <button class="nav-item" data-status="active">Active <span class="count" id="count-active">0</span></button>
+        <button class="nav-item" data-status="completed">Completed <span class="count" id="count-completed">0</span></button>
+        <button class="nav-item" data-status="overdue">Overdue <span class="count danger" id="count-overdue">0</span></button>
+      </nav>
 
-    <button id="clear-completed" class="clear-btn">Clear completed</button>
-  </main>
+      <nav class="nav-group">
+        <p class="nav-title">Categories</p>
+        <button class="cat-item active" data-cat="all"><span class="dot dot-all"></span>Everything</button>
+        <button class="cat-item" data-cat="work"><span class="dot dot-work"></span>Work <span class="count" id="cat-work">0</span></button>
+        <button class="cat-item" data-cat="personal"><span class="dot dot-personal"></span>Personal <span class="count" id="cat-personal">0</span></button>
+        <button class="cat-item" data-cat="study"><span class="dot dot-study"></span>Study <span class="count" id="cat-study">0</span></button>
+        <button class="cat-item" data-cat="other"><span class="dot dot-other"></span>Other <span class="count" id="cat-other">0</span></button>
+      </nav>
+
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+        <span id="theme-icon">🌙</span> <span id="theme-label">Dark mode</span>
+      </button>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="header">
+        <div>
+          <h1 id="greeting">Hello 👋</h1>
+          <p class="subtitle" id="today-date"></p>
+        </div>
+      </header>
+
+      <!-- Stats -->
+      <section class="stats">
+        <div class="stat-card">
+          <span class="stat-label">Total</span>
+          <span class="stat-value" id="stat-total">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Completed</span>
+          <span class="stat-value ok" id="stat-done">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Pending</span>
+          <span class="stat-value warn" id="stat-active">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Overdue</span>
+          <span class="stat-value bad" id="stat-overdue">0</span>
+        </div>
+      </section>
+
+      <section class="progress-card">
+        <div class="progress-head">
+          <span>Overall progress</span>
+          <strong id="progress-text">0%</strong>
+        </div>
+        <div class="progress-track"><div class="progress-bar" id="progress-bar"></div></div>
+      </section>
+
+      <!-- Add task -->
+      <form id="task-form" class="add-card">
+        <input type="text" id="task-input" class="add-input" placeholder="Add a new task…" required autocomplete="off">
+        <div class="add-row">
+          <select id="category-select" aria-label="Category">
+            <option value="work">💼 Work</option>
+            <option value="personal">🏠 Personal</option>
+            <option value="study">📚 Study</option>
+            <option value="other" selected>✨ Other</option>
+          </select>
+          <select id="priority-select" aria-label="Priority">
+            <option value="low">🟢 Low</option>
+            <option value="medium" selected>🟡 Medium</option>
+            <option value="high">🔴 High</option>
+          </select>
+          <input type="date" id="due-input" aria-label="Due date">
+          <button type="submit" class="btn-primary">+ Add task</button>
+        </div>
+      </form>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="search" placeholder="Search tasks…" autocomplete="off">
+        </div>
+        <select id="sort-select" aria-label="Sort tasks">
+          <option value="manual">Sort: Manual (drag)</option>
+          <option value="newest">Sort: Newest</option>
+          <option value="due">Sort: Due date</option>
+          <option value="priority">Sort: Priority</option>
+        </select>
+        <button id="clear-completed" class="btn-ghost">Clear completed</button>
+      </div>
+
+      <ul id="task-list" class="task-list"></ul>
+
+      <div id="empty-state" class="empty-state">
+        <div class="empty-emoji">🎉</div>
+        <p class="empty-title">Nothing here</p>
+        <p class="empty-text">Add a task above to get started.</p>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script src="script.js"></script>
 </body>
